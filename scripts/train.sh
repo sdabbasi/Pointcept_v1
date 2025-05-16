@@ -4,6 +4,8 @@ cd $(dirname $(dirname "$0")) || exit
 ROOT_DIR=$(pwd)
 PYTHON=python
 
+export WANDB_MODE=disabled
+
 TRAIN_CODE=train.py
 
 DATASET=scannet

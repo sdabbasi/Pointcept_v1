@@ -3,6 +3,8 @@
 cd $(dirname $(dirname "$0")) || exit
 PYTHON=python
 
+export WANDB_MODE=disabled
+
 TEST_CODE=test.py
 
 DATASET=scannet

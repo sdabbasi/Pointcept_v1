@@ -8,6 +8,8 @@ from pointcept.models.utils.structure import Point
 from pointcept.models.utils import offset2batch
 from .builder import MODELS, build_model
 
+from tools.local_vis_utils import visualize_pca, simple_vis_saver
+import copy
 
 @MODELS.register_module()
 class DefaultSegmentor(nn.Module):
@@ -61,6 +63,11 @@ class DefaultSegmentorV2(nn.Module):
     def forward(self, input_dict, return_point=False):
         point = Point(input_dict)
         point = self.backbone(point)
+
+        # global_point_copy = copy.deepcopy(point)
+        # upcast_depth = 0
+        # visualize_pca(global_point_copy, upcast_depth=upcast_depth, file_name=f'tools/ply_vis/semseg_backbone_umap_up_{upcast_depth}.ply')
+
         # Backbone added after v1.5.0 return Point instead of feat and use DefaultSegmentorV2
         # TODO: remove this part after make all backbone return Point only.
         if isinstance(point, Point):

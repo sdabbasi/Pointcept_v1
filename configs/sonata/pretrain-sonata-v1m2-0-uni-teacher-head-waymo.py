@@ -5,12 +5,12 @@ Configuration for pretraining a SONATA model on the Waymo dataset
 _base_ = ["../_base_/default_runtime.py"]
 
 # misc custom setting
-batch_size = 6  # bs: total bs in all gpus
-num_worker = 6
+batch_size = 1  # bs: total bs in all gpus
+num_worker = 8
 mix_prob = 0
 clip_grad = 3.0
 empty_cache = False
-enable_amp = True
+enable_amp = False
 amp_dtype = "bfloat16"
 evaluate = False
 find_unused_parameters = False
@@ -77,7 +77,8 @@ model = dict(
 )
 
 # scheduler settings
-epoch = 100
+epoch = 120
+eval_epoch = 120
 base_lr = 0.002
 lr_decay = 0.9  # layer-wise lr decay
 

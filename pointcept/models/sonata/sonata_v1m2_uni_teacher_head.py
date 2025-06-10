@@ -23,6 +23,9 @@ from pointcept.models.utils import offset2batch, offset2bincount, batch2offset
 from pointcept.utils.comm import get_world_size, all_gather
 from pointcept.utils.scheduler import CosineScheduler
 
+from tools.local_vis_utils import visualize_pca, simple_vis_saver
+import copy
+import random
 
 class OnlineCluster(nn.Module):
     def __init__(
@@ -416,6 +419,11 @@ class Sonata(PointModel):
             result_dict = dict(loss=[])
             # teacher backbone forward (shared with mask and unmask)
             global_point_ = self.teacher.backbone(global_point)
+
+            # for up_level in range(5):
+            #     global_point_copy = copy.deepcopy(global_point_)
+            #     visualize_pca(global_point_copy, upcast_depth=up_level, file_name=f'teacher_pca_up{up_level}.ply')
+
             global_point_ = self.up_cast(global_point_)
             # teacher head forward
             # only use one shared head for both mask and unmask

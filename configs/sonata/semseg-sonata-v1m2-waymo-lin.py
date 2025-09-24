@@ -62,7 +62,7 @@ param_dicts = [dict(keyword="block", lr=0.0002)]
 
 # dataset settings
 dataset_type = "WaymoDataset"
-data_root = "/mnt/nfs/datasets/waymo_v1.4.3/processed"
+data_root = "data/waymo_v1.4.3/processed"
 ignore_index = -1
 names = [
     "Car",

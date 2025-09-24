@@ -169,7 +169,7 @@ data = dict(
     train=dict(
         type="WaymoDataset",
         split=["training", "validation"],
-        data_root="/mnt/nfs/datasets/waymo_v1.4.3/processed",
+        data_root="data/waymo_v1.4.3/processed",
         transform=transform,
         test_mode=False,
     )

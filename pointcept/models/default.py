@@ -10,6 +10,9 @@ from .builder import MODELS, build_model
 
 from tools.local_vis_utils import visualize_pca, simple_vis_saver
 import copy
+import open3d
+import matplotlib.pyplot as plt
+import numpy as np
 
 @MODELS.register_module()
 class DefaultSegmentor(nn.Module):
@@ -60,8 +63,36 @@ class DefaultSegmentorV2(nn.Module):
             for p in self.backbone.parameters():
                 p.requires_grad = False
 
+
+    def vis(self, points, to_vis_labels, batch_size, section):
+        _points = torch.cat([points.batch.unsqueeze(1), points.coord], dim=1)
+        for i in range(batch_size):
+            mask = _points[:, 0] == i
+            point_coordinates = _points[mask, 1:4].cpu().numpy()
+            semantic_labels = to_vis_labels[mask].cpu().numpy()
+            sem_seg_ignore_index = -1
+            num_sem_seg_classes = 22
+
+            # 22 classes: 0-21, ignore class: -1
+            colormap = plt.get_cmap('tab20', num_sem_seg_classes)
+            label_to_color = {label: colormap(label)[:3] for label in range(num_sem_seg_classes)}
+            label_to_color[sem_seg_ignore_index] = [0.0, 0.0, 0.0]
+
+            point_colors = np.array([label_to_color.get(label, [1.0, 0.0, 0.0]) for label in semantic_labels])
+
+            pcd = open3d.geometry.PointCloud()
+            pcd.points = open3d.utility.Vector3dVector(point_coordinates)
+            pcd.colors = open3d.utility.Vector3dVector(point_colors)
+
+            open3d.io.write_point_cloud(f'./{section}_frame_{i}.ply', pcd)
+            print(f"Successfully saved colored point cloud {section}_frame_{i}.ply")
+
+
     def forward(self, input_dict, return_point=False):
         point = Point(input_dict)
+        
+        # self.vis(point, point.segment, torch.unique(point.batch).numel(), "train")
+        
         point = self.backbone(point)
 
         # global_point_copy = copy.deepcopy(point)

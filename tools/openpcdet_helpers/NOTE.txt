@@ -1,0 +1,12 @@
+The files and modules in this folder are designed to be used in
+openpcdet project with inspiration from pointcept nodules.
+
+In openpcdet project, for WAYMO dataset, when running the following command to
+preprocess waymo data, it uses waymo_dataset.py and waymo_utils.py. See the command:
+
+python -m pcdet.datasets.waymo.waymo_dataset --func create_waymo_infos \
+    --cfg_file tools/cfgs/dataset_configs/waymo_dataset.yaml
+
+The files waymo_dataset.py and waymo_utils.py here are modified such that they also
+produce semantic segmentation labels too. For this manner argument GET_SEG_GTS: True 
+should be set in waymo_dataset.yaml files.
